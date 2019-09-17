@@ -1,6 +1,15 @@
 @import "vars";
-@import "fonts";
 @import "libs";
+@import "fonts";
+@import "icons";
+
+// Blocks
+@import "blocks/loader";
+
+// Parts
+@import "parts/header";
+@import "parts/footer";
+
 
 ::placeholder {
 	color: #666;
@@ -12,22 +21,17 @@
 }
 
 body {
-	font-size: 16px;
-	min-width: 320px;
+	font-size: 18px;
+	min-width: 300px;
 	position: relative;
-	line-height: 1.65;
+	line-height: 1.5;
 	font-family: $default-font;
 	overflow-x: hidden;
 	color: $text;
+	background-color: #fff;
 	input, textarea {
 		border: #666 1px solid;
 		outline: none;
-		&:focus:required:invalid {
-			border-color: red;
-		}
-		&:required:valid {
-			border-color: green;
-		}
 	}
 }
 
@@ -49,5 +53,4 @@ b, strong {
 }
 
 
-
-@import "media"; // Always at the end
+@import "../media"; // Always at the end

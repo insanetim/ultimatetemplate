@@ -1,95 +1,119 @@
-var syntax        = 'sass'; // Syntax: sass or scss;
+const gulp = require("gulp");
 
-var gulp          = require('gulp'),
-		gutil         = require('gulp-util' ),
-		sass          = require('gulp-sass'),
-		browserSync   = require('browser-sync'),
-		concat        = require('gulp-concat'),
-		uglify        = require('gulp-uglify'),
-		cleancss      = require('gulp-clean-css'),
-		rename        = require('gulp-rename'),
-		autoprefixer  = require('gulp-autoprefixer'),
-		notify        = require('gulp-notify'),
-		rsync         = require('gulp-rsync'),
-		imageResize   = require('gulp-image-resize'),
-		imagemin      = require('gulp-imagemin'),
-		del           = require('del');
+// For js.
+const rename = require("gulp-rename");
+const uglify = require("gulp-uglify-es").default;
 
-// Local Server
-gulp.task('browser-sync', function() {
-	browserSync({
-		server: {
-			baseDir: 'dist'
-		},
-		notify: false,
-		// open: false,
-		// online: false, // Work Offline Without Internet Connection
-		// tunnel: true, tunnel: "projectname", // Demonstration page: http://projectname.localtunnel.me
-	})
+// For styles.
+const sass = require("gulp-sass");
+const autoprefixer = require("gulp-autoprefixer");
+const cleanCSS = require("gulp-clean-css");
+
+// For include parts of files.
+const rigger = require("gulp-rigger");
+
+// For errors.
+const notify = require("gulp-notify");
+
+// For view.
+const del = require("del");
+const browserSync = require("browser-sync");
+const reload = browserSync.reload;
+
+const root = `./app`;
+
+const config = {
+  scss: {
+    dir: `${root}/scss/**/*.scss`,
+    src: `${root}/scss/pages/*.scss`,
+    dist: `${root}/css`
+  },
+  html: {
+    dir: `${root}/dev_html/**/*.html`,
+    src: `${root}/dev_html/*.html`,
+    dist: `${root}/html`
+  },
+  js: {
+    dir: `${root}/dev_js/**/*.js`,
+    src: `${root}/dev_js/pages/*.js`,
+    dist: `${root}/js`
+  }
+};
+
+// Server.
+const serverConfig = {
+  server: {
+    baseDir: root,
+    directory: true
+  },
+  startPath: "html/index.html",
+  notify: false
+};
+
+gulp.task("browser-sync", function() {
+  browserSync(serverConfig);
 });
 
-// Sass|Scss Styles
-gulp.task('styles', function() {
-	return gulp.src('app/'+syntax+'/**/*.'+syntax+'')
-	.pipe(sass({ outputStyle: 'expanded' }).on("error", notify.onError()))
-	.pipe(rename({ suffix: '.min', prefix : '' }))
-	.pipe(autoprefixer(['last 15 versions']))
-	.pipe(cleancss( {level: { 1: { specialComments: 0 } } })) // Opt., comment out when debugging
-	.pipe(gulp.dest('dist/css'))
-	.pipe(browserSync.stream())
+gulp.task("html", function() {
+  return gulp
+    .src(config.html.src)
+    .pipe(rigger())
+    .pipe(gulp.dest(config.html.dist))
+    .pipe(reload({ stream: true }));
 });
 
-// JS
-gulp.task('scripts', function() {
-	return gulp.src([
-		'app/libs/jquery/dist/jquery.min.js',
-		'app/js/common.js', // Always at the end
-		])
-	.pipe(concat('scripts.min.js'))
-	// .pipe(uglify()) // Mifify js (opt.)
-	.pipe(gulp.dest('dist/js'))
-	.pipe(browserSync.reload({ stream: true }))
+gulp.task("scss", function() {
+  return gulp
+    .src(config.scss.src)
+    .pipe(sass({ outputStyle: "expanded" }).on("error", notify.onError()))
+    .pipe(
+      autoprefixer({
+        grid: "autoplace"
+      })
+    )
+    .pipe(cleanCSS({ compatibility: "ie8" }))
+    .pipe(
+      rename({
+        suffix: ".min",
+        extname: ".css"
+      })
+    )
+    .pipe(gulp.dest(config.scss.dist))
+    .pipe(reload({ stream: true }));
 });
 
-// HTML Live Reload
-gulp.task('html', function() {
-	return gulp.src('app/*.html')
-	.pipe(gulp.dest('dist'))
-	.pipe(browserSync.reload({ stream: true }))
+gulp.task("js", function() {
+  return gulp
+    .src(config.js.src)
+    .pipe(rigger())
+    .pipe(uglify())
+    .pipe(
+      rename({
+        suffix: ".min",
+        extname: ".js"
+      })
+    )
+    .pipe(gulp.dest(config.js.dist))
+    .pipe(reload({ stream: true }));
 });
 
-// Images @x1 & @x2 + Compression | Required graphicsmagick (sudo apt update; sudo apt install graphicsmagick)
-gulp.task('imgx1', function() {
-	return gulp.src('app/img_resize/**/*.*')
-	.pipe(imageResize({ width: '50%' }))
-	.pipe(imagemin())
-	.pipe(gulp.dest('dist/img/@1x/'))
-});
-gulp.task('imgx2', function() {
-	return gulp.src('app/img_resize/**/*.*')
-	.pipe(imageResize({ width: '100%' }))
-	.pipe(imagemin())
-	.pipe(gulp.dest('dist/img/@2x/'))
-});
-gulp.task('images', function() {
-	return gulp.src('app/img/**/*.*')
-	.pipe(imagemin())
-	.pipe(gulp.dest('dist/img/'))
-})
-
-// Clear dist folder
-gulp.task('cleardist', function() {
-	return del(['dist'], { force:true })
+gulp.task("clean", function() {
+  return del([config.html.dist, config.scss.dist, config.js.dist], {
+    force: true
+  });
 });
 
-
-gulp.task('img', gulp.parallel('imgx1', 'imgx2', 'images'));
-
-gulp.task('watch', function() {
-	gulp.watch('app/'+syntax+'/**/*.'+syntax+'', gulp.parallel('styles'));
-	gulp.watch(['libs/**/*.js', 'app/js/common.js'], gulp.parallel('scripts'));
-	gulp.watch('app/*.html', gulp.parallel('html'));
-	gulp.watch('app/img/_src/**/*', gulp.parallel('img'));
+gulp.task("watch", function() {
+  gulp.watch(config.html.dir, gulp.series("html"));
+  gulp.watch(config.scss.dir, gulp.series("scss"));
+  gulp.watch(config.js.dir, gulp.series("js"));
 });
 
-gulp.task('default', gulp.parallel('html', 'img', 'styles', 'scripts', 'browser-sync', 'watch'));
+gulp.task(
+  "default",
+  gulp.series(
+    ["clean"],
+    gulp.parallel(["html"], ["scss"], ["js"]),
+    gulp.parallel(["watch"], ["browser-sync"])
+  )
+);
