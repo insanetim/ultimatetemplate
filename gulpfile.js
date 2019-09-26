@@ -35,7 +35,7 @@ const config = {
   },
   js: {
     dir: `${root}/dev_js/**/*.js`,
-    src: `${root}/dev_js/pages/*.js`,
+    src: `${root}/dev_js/*.js`,
     dist: `${root}/js`
   }
 };
@@ -86,16 +86,20 @@ gulp.task("js", function() {
   return gulp
     .src(config.js.src)
     .pipe(rigger())
-    .pipe(uglify())
     .pipe(
       rename({
         suffix: ".min",
         extname: ".js"
       })
     )
-    .pipe(gulp.dest(config.js.dist))
-    .pipe(reload({ stream: true }));
+    .pipe(uglify())
+    .pipe(gulp.dest(config.js.dist));
 });
+
+gulp.task("js-watch", function(done) {
+  browserSync.reload();
+  done();
+})
 
 gulp.task("clean", function() {
   return del([config.html.dist, config.scss.dist, config.js.dist], {
@@ -106,7 +110,7 @@ gulp.task("clean", function() {
 gulp.task("watch", function() {
   gulp.watch(config.html.dir, gulp.series("html"));
   gulp.watch(config.scss.dir, gulp.series("scss"));
-  gulp.watch(config.js.dir, gulp.series("js"));
+  gulp.watch(config.js.dir, gulp.series("js", "js-watch"));
 });
 
 gulp.task(

@@ -5,7 +5,5 @@
 //= ./partials/preloader.js
 
 $(function() {
-
-
-
+    
 });
