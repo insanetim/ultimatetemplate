@@ -8,13 +8,14 @@
     "browser-sync": "^2.26.7",
     "del": "^5.1.0",
     "gulp": "^4.0.2",
-    "gulp-autoprefixer": "^7.0.0",
+    "gulp-autoprefixer": "^7.0.1",
     "gulp-clean-css": "^4.2.0",
     "gulp-notify": "^3.2.0",
     "gulp-rename": "^1.4.0",
     "gulp-rigger": "^0.5.8",
     "gulp-sass": "^4.0.2",
-    "gulp-uglify-es": "^1.0.4"
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-uglify-es": "^2.0.0"
   },
   "dependencies": {
     "jquery": "^3.4.1"

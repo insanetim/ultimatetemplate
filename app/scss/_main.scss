@@ -4,11 +4,11 @@
 @import "icons";
 
 // Blocks
-@import "blocks/loader";
+@import "blocks/header";
+@import "blocks/footer";
 
 // Parts
-@import "parts/header";
-@import "parts/footer";
+@import "parts/loader";
 
 
 ::placeholder {

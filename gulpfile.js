@@ -8,6 +8,7 @@ const uglify = require("gulp-uglify-es").default;
 const sass = require("gulp-sass");
 const autoprefixer = require("gulp-autoprefixer");
 const cleanCSS = require("gulp-clean-css");
+const sourcemaps = require("gulp-sourcemaps");
 
 // For include parts of files.
 const rigger = require("gulp-rigger");
@@ -25,7 +26,7 @@ const root = `./app`;
 const config = {
   scss: {
     dir: `${root}/scss/**/*.scss`,
-    src: `${root}/scss/pages/*.scss`,
+    src: `${root}/scss/**/*.scss`,
     dist: `${root}/css`
   },
   html: {
@@ -65,6 +66,7 @@ gulp.task("html", function() {
 gulp.task("scss", function() {
   return gulp
     .src(config.scss.src)
+    .pipe(sourcemaps.init())
     .pipe(sass({ outputStyle: "expanded" }).on("error", notify.onError()))
     .pipe(
       autoprefixer({
@@ -78,6 +80,7 @@ gulp.task("scss", function() {
         extname: ".css"
       })
     )
+    .pipe(sourcemaps.write('/'))
     .pipe(gulp.dest(config.scss.dist))
     .pipe(reload({ stream: true }));
 });
