@@ -18,6 +18,27 @@
 	color: #fff;
 }
 
+a {
+	color: map-get($link, default);
+	text-decoration: none;
+	transition: color .3s;
+	&:hover {
+		color: map-get($link, hover);
+		text-decoration: none;
+	}
+	&:focus {
+		outline: none;
+	}
+}
+
+button:focus {
+	outline: none;
+}
+
+::-moz-focus-inner {
+	border: 0;
+}
+
 body {
 	font-size: 18px;
 	min-width: 300px;
