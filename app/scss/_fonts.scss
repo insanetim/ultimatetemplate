@@ -1,5 +1,25 @@
-@import "_mixins/font-face";
+// font-weight helper:
 
-@include font-face("roboto-example", "./../../fonts/RobotoRegular/RobotoRegular");
-@include font-face("roboto-example", "./../../fonts/RobotoBold/RobotoBold", bold);
-@include font-face("icons", "./../../fonts/Icons/Icons");
+// 100 Extra Light or Ultra Light;
+// 200 Light or Thin;
+// 300 Book or Demi;
+// 400 Regular or Normal;
+// 500 Medium;
+// 600 Semibold or Demibold;
+// 700 Bold;
+// 800 Black or Extra Bold or Heavy;
+// 900 Extra Black or Fat or Ultra Black
+
+@mixin font-face($font-family, $file-path, $weight: normal, $style: normal, $display: swap) {
+	@font-face {
+		font-family: $font-family;
+		font-weight: $weight;
+		font-style: $style;
+		font-display: $display;
+		src: url('#{$file-path}.eot');
+		src: url('#{$file-path}.eot?#iefix') format('embedded-opentype'), url('#{$file-path}.woff') format('woff'), url('#{$file-path}.ttf') format('truetype');
+	}
+}
+
+@include font-face("roboto", "./../../fonts/RobotoRegular/RobotoRegular");
+@include font-face("roboto", "./../../fonts/RobotoBold/RobotoBold", bold);
