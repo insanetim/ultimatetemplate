@@ -1,14 +1,16 @@
 const gulp = require("gulp");
+const del = require("del");
+const rename = require("gulp-rename");
 
 // For js.
-const rename = require("gulp-rename");
 const uglify = require("gulp-uglify-es").default;
 
 // For styles.
 const sass = require("gulp-sass");
-const autoprefixer = require("gulp-autoprefixer");
-const cleanCSS = require("gulp-clean-css");
 const sourcemaps = require("gulp-sourcemaps");
+const postcss = require("gulp-postcss");
+const autoprefixer = require("autoprefixer");
+const cssnano = require("cssnano");
 
 // For include parts of files.
 const rigger = require("gulp-rigger");
@@ -17,7 +19,6 @@ const rigger = require("gulp-rigger");
 const notify = require("gulp-notify");
 
 // For view.
-const del = require("del");
 const browserSync = require("browser-sync");
 const reload = browserSync.reload;
 
@@ -64,22 +65,19 @@ gulp.task("html", function() {
 });
 
 gulp.task("scss", function() {
+  const plugins = [
+    autoprefixer({grid: "autoplace"}),
+    cssnano()
+  ];
   return gulp
     .src(config.scss.src)
     .pipe(sourcemaps.init())
-    .pipe(sass({ outputStyle: "expanded" }).on("error", notify.onError()))
-    .pipe(
-      autoprefixer({
-        grid: "autoplace"
-      })
-    )
-    .pipe(cleanCSS({ compatibility: "ie8" }))
-    .pipe(
-      rename({
-        suffix: ".min",
-        extname: ".css"
-      })
-    )
+    .pipe(sass().on("error", notify.onError()))
+    .pipe(postcss(plugins))
+    .pipe(rename({
+      suffix: ".min",
+      extname: ".css"
+    }))
     .pipe(sourcemaps.write('/'))
     .pipe(gulp.dest(config.scss.dist))
     .pipe(reload({ stream: true }));
