@@ -19,7 +19,7 @@ const rigger = require("gulp-rigger");
 const notify = require("gulp-notify");
 
 // For view.
-const browserSync = require("browser-sync");
+const browserSync = require("browser-sync").create();
 const reload = browserSync.reload;
 
 const root = `./app`;
@@ -53,7 +53,7 @@ const serverConfig = {
 };
 
 gulp.task("browser-sync", function() {
-  browserSync(serverConfig);
+  browserSync.init(serverConfig);
 });
 
 gulp.task("html", function() {
@@ -61,7 +61,7 @@ gulp.task("html", function() {
     .src(config.html.src)
     .pipe(rigger())
     .pipe(gulp.dest(config.html.dist))
-    .pipe(reload({ stream: true }));
+    .pipe(browserSync.stream());
 });
 
 gulp.task("scss", function() {
@@ -80,7 +80,7 @@ gulp.task("scss", function() {
     }))
     .pipe(sourcemaps.write('/'))
     .pipe(gulp.dest(config.scss.dist))
-    .pipe(reload({ stream: true }));
+    .pipe(browserSync.stream());
 });
 
 gulp.task("js", function() {
