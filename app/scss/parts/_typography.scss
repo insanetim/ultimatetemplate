@@ -1,0 +1,21 @@
+a {
+	color: map-get($link, default);
+	text-decoration: none;
+	transition: color .3s;
+	&:hover {
+		color: map-get($link, hover);
+		text-decoration: none;
+	}
+	&:focus {
+		outline: none;
+	}
+}
+
+::selection {
+	background-color: $accent;
+	color: #fff;
+}
+
+b, strong {
+	font-weight: bold;
+}

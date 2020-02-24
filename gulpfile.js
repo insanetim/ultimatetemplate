@@ -13,7 +13,6 @@ const autoprefixer = require("autoprefixer");
 const cssnano = require("cssnano");
 
 // For js.
-const rigger = require("gulp-rigger");
 const uglify = require("gulp-uglify-es").default;
 
 // For errors.
@@ -90,7 +89,6 @@ gulp.task("css", function() {
 gulp.task("js", function() {
   return gulp
     .src(config.js.src)
-    .pipe(rigger())
     .pipe(
       rename({
         suffix: ".min",

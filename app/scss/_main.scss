@@ -1,60 +1,30 @@
 @import "vars";
-@import "fonts";
 @import "libs";
+@import "fonts";
+@import "icons";
 
+//Parts
+@import "parts/typography";
+@import "parts/forms";
 
 // Blocks
 @import "blocks/header";
 @import "blocks/footer";
-@import "blocks/loader";
 
-
-::placeholder {
-	color: #666;
-}
-
-::selection {
-	background-color: $accent;
-	color: #fff;
-}
-
-a {
-	color: map-get($link, default);
-	text-decoration: none;
-	transition: color .3s;
-	&:hover {
-		color: map-get($link, hover);
-		text-decoration: none;
-	}
-	&:focus {
-		outline: none;
-	}
-}
-
-button:focus {
-	outline: none;
-}
-
-::-moz-focus-inner {
-	border: 0;
-}
 
 body {
-	font-size: 16px;
-	min-width: 320px;
-	min-height: 100vh;
-	position: relative;
-	line-height: 1.65;
-	font-family: $default-font;
-	overflow-x: hidden;
-	color: $text;
-	background-color: #fff;
 	display: flex;
 	flex-direction: column;
-	input, textarea {
-		border: #666 1px solid;
-		outline: none;
-	}
+	position: relative;
+	min-width: 320px;
+	min-height: 100vh;
+	overflow-x: hidden;
+	font-family: $default-font;
+	font-size: 16px;
+	font-weight: normal;
+	line-height: 1.65;
+	color: $text;
+	background-color: #fff;
 }
 
 main.main {
@@ -76,16 +46,14 @@ main.main {
 	}
 }
 
-.img-responsive {
+.img {
 	display: block;
-	max-width: 100%;
+	width: 100%;
 	height: auto;
-}
-
-.text-center {
-	text-align: center;
-}
-
-b, strong {
-	font-weight: bold;
+	&-cover {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
 }

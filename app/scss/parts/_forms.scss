@@ -1,0 +1,16 @@
+input, textarea {
+  border: #666 1px solid;
+  outline: none;
+}
+
+button:focus {
+	outline: none;
+}
+
+::placeholder {
+	color: #666;
+}
+
+::-moz-focus-inner {
+	border: 0;
+}

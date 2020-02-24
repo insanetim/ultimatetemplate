@@ -1,9 +1,10 @@
 extends layout/default.pug
 
 block variables
-  - var title = "Starting Template"
+  - var title = "Ultimate Template"
 
 block styles
+  include modules/styles.pug
   link(href="../css/pages/index.min.css" rel="stylesheet")
   
 block content
@@ -11,13 +12,13 @@ block content
     section.section
       .container
         .row
-          .col-6
+          .col
             p
               | Lorem ipsum dolor sit amet, consectetur adipisicing elit. #[strong Labore doloribus obcaecati] voluptatum provident! Dolorem ipsam dolorum, maxime necessitatibus, eum quae eveniet ad cumque porro enim reiciendis at illo dignissimos debitis!
-          .col-6
+          .col
             p
-              | Lorem ipsum dolor sit amet, consectetur adipisicing elit. #[strong Labore doloribus obcaecati] voluptatum provident! Dolorem ipsam dolorum, maxime necessitatibus, eum quae eveniet ad cumque porro enim reiciendis at illo dignissimos debitis!
+              | Lorem ipsum dolor sit amet, consectetur adipisicing elit. #[a(href="#") Labore doloribus obcaecati] voluptatum provident! Dolorem ipsam dolorum, maxime necessitatibus, eum quae eveniet ad cumque porro enim reiciendis at illo dignissimos debitis!
 block scripts
-  include modules/libs.pug
+  include modules/scripts.pug
   script(src='../js/main.min.js')
   script(src='../js/index.min.js')
