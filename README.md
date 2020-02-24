@@ -5,7 +5,7 @@
 
 <h2>How to use Ultimate Template</h2>
 
-<pre>git clone https://github.com/insanetim/ltimatetemplate</pre>
+<pre>git clone https://github.com/insanetim/ultimatetemplate</pre>
 
 <ol>
 	<li>Clone or <a href="https://github.com/insanetim/ultimatetemplate/archive/master.zip">Download</a> <strong>Starting Template</strong> from GitHub</li>
