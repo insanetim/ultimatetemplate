@@ -42,15 +42,37 @@ button:focus {
 body {
 	font-size: 16px;
 	min-width: 320px;
+	min-height: 100vh;
 	position: relative;
 	line-height: 1.65;
 	font-family: $default-font;
 	overflow-x: hidden;
 	color: $text;
 	background-color: #fff;
+	display: flex;
+	flex-direction: column;
 	input, textarea {
 		border: #666 1px solid;
 		outline: none;
+	}
+}
+
+main.main {
+	flex: 1 1 0%;
+}
+
+.flex {
+	&-initial {
+		flex: 0 1 auto;
+	}
+	&-1 {
+		flex: 1 1 0%;
+	}
+	&-auto {
+		flex: 1 1 auto;
+	}
+	&-none {
+		flex: none;
 	}
 }
 

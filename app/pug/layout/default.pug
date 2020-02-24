@@ -1,0 +1,22 @@
+include ../mixins/mixins.pug
+block variables
+
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0, shrink-to-fit=no")
+    meta(http-equiv="X-UA-Compatible", content="ie=edge")
+    link(rel="apple-touch-icon" href="../img/favicon/apple-touch-icon.png")
+    link(rel="shortcut icon" href="../img/favicon/favicon.png")
+    title= title
+    block styles
+  body
+    block loader
+      include ../modules/loader.pug
+    block head
+      include ../modules/header.pug
+    block content
+    block foot
+      include ../modules/footer.pug
+    block scripts

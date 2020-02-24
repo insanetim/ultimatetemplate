@@ -2,18 +2,19 @@ const gulp = require("gulp");
 const del = require("del");
 const rename = require("gulp-rename");
 
-// For js.
-const uglify = require("gulp-uglify-es").default;
+// For html.
+const pug = require("gulp-pug");
 
-// For styles.
+// For css.
 const sass = require("gulp-sass");
 const sourcemaps = require("gulp-sourcemaps");
 const postcss = require("gulp-postcss");
 const autoprefixer = require("autoprefixer");
 const cssnano = require("cssnano");
 
-// For include parts of files.
+// For js.
 const rigger = require("gulp-rigger");
+const uglify = require("gulp-uglify-es").default;
 
 // For errors.
 const notify = require("gulp-notify");
@@ -25,15 +26,15 @@ const reload = browserSync.reload;
 const root = `./app`;
 
 const config = {
-  scss: {
+  html: {
+    dir: `${root}/pug/**/*.pug`,
+    src: `${root}/pug/*.pug`,
+    dist: `${root}/html`
+  },
+  css: {
     dir: `${root}/scss/**/*.scss`,
     src: `${root}/scss/**/*.scss`,
     dist: `${root}/css`
-  },
-  html: {
-    dir: `${root}/dev_html/**/*.html`,
-    src: `${root}/dev_html/*.html`,
-    dist: `${root}/html`
   },
   js: {
     dir: `${root}/dev_js/**/*.js`,
@@ -59,27 +60,30 @@ gulp.task("browser-sync", function() {
 gulp.task("html", function() {
   return gulp
     .src(config.html.src)
-    .pipe(rigger())
+    .pipe(
+      pug({
+        pretty: true
+      })
+    )
     .pipe(gulp.dest(config.html.dist))
     .pipe(browserSync.stream());
 });
 
-gulp.task("scss", function() {
-  const plugins = [
-    autoprefixer({grid: "autoplace"}),
-    cssnano()
-  ];
+gulp.task("css", function() {
+  const plugins = [autoprefixer({ grid: "autoplace" }), cssnano()];
   return gulp
-    .src(config.scss.src)
+    .src(config.css.src)
     .pipe(sourcemaps.init())
     .pipe(sass().on("error", notify.onError()))
     .pipe(postcss(plugins))
-    .pipe(rename({
-      suffix: ".min",
-      extname: ".css"
-    }))
-    .pipe(sourcemaps.write('/'))
-    .pipe(gulp.dest(config.scss.dist))
+    .pipe(
+      rename({
+        suffix: ".min",
+        extname: ".css"
+      })
+    )
+    .pipe(sourcemaps.write("/"))
+    .pipe(gulp.dest(config.css.dist))
     .pipe(browserSync.stream());
 });
 
@@ -100,17 +104,17 @@ gulp.task("js", function() {
 gulp.task("js-watch", function(done) {
   browserSync.reload();
   done();
-})
+});
 
 gulp.task("clean", function() {
-  return del([config.html.dist, config.scss.dist, config.js.dist], {
+  return del([config.html.dist, config.css.dist, config.js.dist], {
     force: true
   });
 });
 
 gulp.task("watch", function() {
   gulp.watch(config.html.dir, gulp.series("html"));
-  gulp.watch(config.scss.dir, gulp.series("scss"));
+  gulp.watch(config.css.dir, gulp.series("css"));
   gulp.watch(config.js.dir, gulp.series("js", "js-watch"));
 });
 
@@ -118,7 +122,7 @@ gulp.task(
   "default",
   gulp.series(
     ["clean"],
-    gulp.parallel(["html"], ["scss"], ["js"]),
-    gulp.parallel(["watch"], ["browser-sync"])
+    gulp.parallel("html", "css", "js"),
+    gulp.parallel("watch", "browser-sync")
   )
 );

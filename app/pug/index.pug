@@ -1,0 +1,23 @@
+extends layout/default.pug
+
+block variables
+  - var title = "Starting Template"
+
+block styles
+  link(href="../css/pages/index.min.css" rel="stylesheet")
+  
+block content
+  main.main
+    section.section
+      .container
+        .row
+          .col-6
+            p
+              | Lorem ipsum dolor sit amet, consectetur adipisicing elit. #[strong Labore doloribus obcaecati] voluptatum provident! Dolorem ipsam dolorum, maxime necessitatibus, eum quae eveniet ad cumque porro enim reiciendis at illo dignissimos debitis!
+          .col-6
+            p
+              | Lorem ipsum dolor sit amet, consectetur adipisicing elit. #[strong Labore doloribus obcaecati] voluptatum provident! Dolorem ipsam dolorum, maxime necessitatibus, eum quae eveniet ad cumque porro enim reiciendis at illo dignissimos debitis!
+block scripts
+  include modules/libs.pug
+  script(src='../js/main.min.js')
+  script(src='../js/index.min.js')
