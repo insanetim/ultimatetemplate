@@ -4,3 +4,4 @@
 /**/*.DS_Store
 /**/*.vscode
 /**/*.css.map
+package-lock.json
