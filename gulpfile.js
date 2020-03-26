@@ -98,9 +98,7 @@ function watcher() {
   watch(config.html.dir, html);
   watch(config.css.dir, css);
   watch(config.js.dir, js)
-  .on("change", function() {
-    browserSync.reload();
-  });
+  .on("change", browserSync.reload);
 }
 
 exports.clean = clean;
